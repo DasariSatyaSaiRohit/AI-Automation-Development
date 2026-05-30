@@ -1,0 +1,49 @@
+[
+  {
+    "id": "1d4a933d-56c8-4128-8d44-64d721822f77",
+    "url": "https://www.raghuenggcollege.com/",
+    "label": "raghu,nsrit",
+    "enriched_at": "2026-05-30T10:00:10.210706Z",
+    "website_name": "Raghu Engineering College - Autonomous",
+    "company_name": "Raghu Engineering College",
+    "address": "N/A",
+    "mobile_number": "N/A",
+    "mail": [],
+    "core_service": "Raghu Engineering College provides focused engineering education and training to students, aiming to secure lucrative job opportunities and high placement packages.",
+    "target_customer": "Prospective students seeking higher education in engineering with strong placement opportunities, and potentially their parents.",
+    "probable_pain_point": "Students struggle to find lucrative job opportunities and secure high-paying placements after graduation, often lacking the necessary professional development and industry connections.",
+    "outreach_opener": "Your commitment to student success is evident, especially with Raghu Engineering College being ranked No.1 in North Andhra for Placements and accredited by NAAC with an ‘A+’ Grade. We admire your focus on providing students with lucrative job opportunities and comprehensive professional development programs."
+  },
+  {
+    "id": "c7ae5a1e-eee0-4807-bcf8-0464375aa110",
+    "url": "https://www.nsrit.edu.in/",
+    "label": "raghu,nsrit",
+    "enriched_at": "2026-05-30T10:00:29.361791Z",
+    "website_name": "NSRIT - Nadimpalli Satyanarayana Raju Institute of Technology",
+    "company_name": "Nadimpalli Satyanarayana Raju Institute of Technology",
+    "address": "N/A",
+    "mobile_number": "N/A",
+    "mail": [],
+    "core_service": "NSRIT is an educational institution providing technology-focused academic programs.",
+    "target_customer": "Prospective students seeking higher education and academic programs in technology and engineering disciplines.",
+    "probable_pain_point": "Students are likely seeking a reputable institution to acquire relevant technological skills and qualifications for future career advancement.",
+    "outreach_opener": "I noticed NSRIT is prominently identified as the Nadimpalli Satyanarayana Raju Institute of Technology, with a clear emphasis on its institutional profile and leadership. Given your focus on technology education, I believe our solution could significantly enhance your student engagement initiatives."
+  },
+  {
+    "id": "f945fe86-0f95-40ff-b346-f330252937e5",
+    "url": "https://www.andhrauniversity.edu.in/",
+    "label": "AU",
+    "enriched_at": "2026-05-30T10:01:26.499500Z",
+    "website_name": "Andhra University",
+    "company_name": "Andhra University",
+    "address": "Andhra University, Waltair Junction, Visakhapatnam-530003. Andhra Pradesh, INDIA.",
+    "mobile_number": "N/A",
+    "mail": [
+      "support@andhrauniversity.edu.in"
+    ],
+    "core_service": "Andhra University provides multi-disciplinary higher education, research, and affiliation services as a residential teaching-cum-affiliating university.",
+    "target_customer": "Students seeking higher education, scholars, teaching and non-teaching staff, and their families.",
+    "probable_pain_point": "Students and faculty seeking high-quality, multi-disciplinary higher education, research opportunities, and comprehensive support services.",
+    "outreach_opener": "Andhra University's recent A++ NAAC accreditation with a score of 3.74 out of 4, the highest among top three universities in India, truly stands out. Your commitment to cutting-edge research across diverse areas like Earth sciences, data analytics, and biotechnology is impressive."
+  }
+]
