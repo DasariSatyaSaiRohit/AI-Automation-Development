@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prospect Research Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:       #f5f4f0;
+  --surface:  #ffffff;
+  --surface2: #f0efe9;
+  --border:   #e2e0d8;
+  --border2:  #ccc9be;
+  --accent:   #1a6b4a;
+  --accent-l: #e8f5ee;
+  --accent-h: #155c3e;
+  --red:      #c0392b;
+  --red-l:    #fdf0ee;
+  --text:     #1c1b18;
+  --text2:    #5a5850;
+  --text3:    #9a9589;
+  --mono:     'Fira Code', monospace;
+  --sans:     'Plus Jakarta Sans', sans-serif;
+  --r:        10px;
+  --shadow:   0 1px 3px rgba(0,0,0,.07), 0 4px 12px rgba(0,0,0,.05);
+  --shadow-l: 0 1px 2px rgba(0,0,0,.05);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* ── HEADER ── */
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;
+  height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.logo{
+  font-size:.95rem;font-weight:700;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:9px;color:var(--text);
+}
+.logo-mark{
+  width:28px;height:28px;border-radius:7px;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg{stroke:#fff;fill:none}
+.header-right{
+  display:flex;align-items:center;gap:8px;
+}
+.badge{
+  font-family:var(--mono);font-size:.65rem;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text3);padding:3px 9px;border-radius:20px;
+}
+
+/* ── LAYOUT ── */
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 80px}
+
+/* ── SECTION HEADER ── */
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.sec-title{font-size:1.05rem;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.sec-sub{font-size:.75rem;color:var(--text3);margin-top:2px}
+
+/* ── CARD ── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  margin-bottom:32px;
+  overflow:hidden;
+}
+.card-body{padding:24px 28px}
+
+/* ── URL ROWS TABLE ── */
+.url-table{width:100%;border-collapse:collapse}
+.url-table thead th{
+  font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text3);padding:0 0 10px 0;text-align:left;border-bottom:1px solid var(--border);
+}
+.url-table thead th:first-child{width:38%}
+.url-table thead th:nth-child(2){width:auto}
+.url-table thead th:last-child{width:42px;text-align:center}
+
+.url-row td{padding:8px 0;border-bottom:1px solid var(--border);vertical-align:middle}
+.url-row:last-child td{border-bottom:none}
+.url-row td:not(:last-child){padding-right:12px}
+
+.row-num{
+  font-family:var(--mono);font-size:.65rem;color:var(--text3);
+  width:22px;text-align:right;padding-right:10px;flex-shrink:0;
+  display:inline-block;
+}
+
+input[type=text]{
+  width:100%;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.78rem;
+  padding:8px 11px;
+  outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+input[type=text]:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(26,107,74,.1);
+  background:#fff;
+}
+input::placeholder{color:var(--text3)}
+
+.td-actions{text-align:center}
+
+/* ── BUTTONS ── */
+.btn{
+  font-family:var(--sans);font-weight:600;font-size:.78rem;
+  border:none;border-radius:7px;cursor:pointer;
+  padding:8px 16px;transition:all .15s;
+  display:inline-flex;align-items:center;gap:6px;
+  white-space:nowrap;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-h);transform:translateY(-1px)}
+.btn-primary:active{transform:none}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+.btn-outline{
+  background:#fff;color:var(--text);
+  border:1px solid var(--border2);
+}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l)}
+
+.btn-add{
+  background:var(--accent-l);color:var(--accent);
+  border:1px dashed rgba(26,107,74,.4);
+  padding:7px 14px;font-size:.75rem;
+}
+.btn-add:hover{background:#d6eedf;border-color:var(--accent)}
+
+.btn-del{
+  background:none;border:none;cursor:pointer;
+  width:28px;height:28px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);transition:all .15s;
+  flex-shrink:0;
+}
+.btn-del:hover{background:var(--red-l);color:var(--red)}
+.btn-del svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+
+.btn-icon-sm{
+  background:none;border:none;cursor:pointer;
+  width:28px;height:28px;border-radius:6px;
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--text3);transition:all .15s;
+}
+.btn-icon-sm:hover{background:var(--red-l);color:var(--red)}
+.btn-icon-sm svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
+
+.actions-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:20px;flex-wrap:wrap;gap:10px;
+}
+.actions-left{display:flex;gap:8px;align-items:center}
+
+/* ── PROGRESS ── */
+.progress-area{
+  margin-top:20px;padding-top:20px;
+  border-top:1px solid var(--border);
+  display:none;
+}
+.progress-area.active{display:block}
+.prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-title{font-size:.75rem;font-weight:600;color:var(--text2)}
+.prog-frac{font-family:var(--mono);font-size:.72rem;color:var(--accent)}
+.prog-track{background:var(--surface2);border-radius:99px;height:5px;overflow:hidden;margin-bottom:14px}
+.prog-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent),#2ecc71);
+  border-radius:99px;width:0%;transition:width .4s ease;
+}
+.prog-rows{display:flex;flex-direction:column;gap:5px}
+.prow{
+  display:flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:.7rem;color:var(--text3);
+  padding:6px 10px;border-radius:6px;background:var(--surface2);
+}
+.prow .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--border2);flex-shrink:0;
+}
+.prow.running .dot{background:var(--accent);animation:blink 1s infinite}
+.prow.done .dot{background:var(--accent)}
+.prow.done{color:var(--text);background:var(--accent-l)}
+.prow.err .dot{background:var(--red)}
+.prow.err{color:var(--red);background:var(--red-l)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── SHIMMER ── */
+.shimmer{
+  position:relative;overflow:hidden;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:22px 24px;
+}
+.shimmer::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.04) 50%,transparent 100%);
+  animation:shim 1.3s infinite;
+}
+@keyframes shim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.sh-line{height:11px;border-radius:5px;background:var(--border);margin-bottom:9px}
+.sh-line.s{width:35%}.sh-line.m{width:60%}.sh-line.l{width:88%}
+
+/* ── RESULTS TOOLBAR ── */
+.results-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;flex-wrap:wrap;gap:10px;
+}
+.results-bar .sec-title{margin:0}
+.rcount{
+  font-family:var(--mono);font-size:.72rem;color:var(--text3);
+  background:var(--surface2);border:1px solid var(--border);
+  padding:3px 10px;border-radius:20px;
+}
+.rcount b{color:var(--accent)}
+
+.btn-clear-all{
+  font-family:var(--sans);font-weight:600;font-size:.72rem;
+  background:none;border:1px solid rgba(192,57,43,.3);
+  color:var(--red);border-radius:6px;padding:5px 12px;
+  cursor:pointer;transition:all .15s;
+}
+.btn-clear-all:hover{background:var(--red-l)}
+
+/* ── RESULTS GRID ── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:14px;
+}
+
+/* ── COMPANY CARD ── */
+.ccard{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  box-shadow:var(--shadow-l);
+  overflow:hidden;
+  animation:fadeUp .3s ease both;
+  transition:box-shadow .2s,transform .2s;
+}
+.ccard:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.ccard-top{
+  padding:16px 18px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;gap:12px;align-items:flex-start;
+}
+.avatar{
+  width:38px;height:38px;border-radius:9px;
+  background:var(--accent-l);border:1px solid rgba(26,107,74,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1rem;color:var(--accent);
+  flex-shrink:0;
+}
+.cmeta{flex:1;min-width:0}
+.cname{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.curl{font-family:var(--mono);font-size:.64rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.cdel{
+  background:none;border:none;cursor:pointer;
+  width:26px;height:26px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);transition:all .15s;flex-shrink:0;
+}
+.cdel:hover{background:var(--red-l);color:var(--red)}
+.cdel svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none}
+
+.ccard-body{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.cfield{}
+.cfk{font-size:.62rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
+.cfv{font-size:.8rem;color:var(--text);line-height:1.5}
+.cfv.mono{font-family:var(--mono);font-size:.72rem}
+
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.tag{
+  font-family:var(--mono);font-size:.62rem;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--accent);border-radius:4px;padding:2px 7px;
+}
+
+.opener-box{
+  background:var(--accent-l);border-left:3px solid var(--accent);
+  border-radius:0 6px 6px 0;padding:9px 12px;
+  font-size:.78rem;line-height:1.55;color:var(--text);font-style:italic;
+}
+
+.ccard-foot{
+  padding:9px 18px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cts{font-family:var(--mono);font-size:.6rem;color:var(--text3)}
+.clabel{
+  font-family:var(--mono);font-size:.6rem;
+  background:var(--accent-l);color:var(--accent);
+  border:1px solid rgba(26,107,74,.2);
+  padding:2px 8px;border-radius:20px;
+}
+
+/* ── EMPTY ── */
+.empty{
+  text-align:center;padding:52px 24px;
+  border:1.5px dashed var(--border2);border-radius:var(--r);
+  color:var(--text3);
+}
+.empty-icon{font-size:2rem;margin-bottom:10px;opacity:.5}
+.empty-txt{font-size:.8rem}
+
+/* ── TOAST ── */
+#toasts{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px}
+.toast{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:10px 16px;
+  font-size:.75rem;font-family:var(--mono);
+  box-shadow:var(--shadow);
+  animation:toastIn .2s ease both;
+  max-width:280px;
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+.toast.ok{border-left:3px solid var(--accent);color:var(--accent)}
+.toast.err{border-left:3px solid var(--red);color:var(--red)}
+.toast.inf{border-left:3px solid #2980b9;color:#2980b9}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:32px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    </div>
+    Prospect Research Agent
+  </div>
+  <div class="header-right">
+    <span class="badge">Hackathon · v1.0</span>
+    <button class="btn btn-outline" onclick="loadResults()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.48"/></svg>
+      Refresh
+    </button>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ══ ENRICH SECTION ══ -->
+  <div class="card">
+    <div class="card-body">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Enrich Companies</div>
+          <div class="sec-sub">Add one or more companies — each with a label and URL</div>
+        </div>
+        <button class="btn btn-add" onclick="addRow()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Row
+        </button>
+      </div>
+
+      <table class="url-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="width:32%">Label</th>
+            <th>Company URL</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="url-tbody"></tbody>
+      </table>
+
+      <div class="actions-row">
+        <div class="actions-left">
+          <button class="btn btn-primary" id="enrich-btn" onclick="startEnrich()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Enrich All
+          </button>
+          <button class="btn btn-outline" onclick="clearRows()">Clear</button>
+        </div>
+        <span id="row-count" style="font-family:var(--mono);font-size:.7rem;color:var(--text3)">0 rows</span>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-area" id="prog-area">
+        <div class="prog-header">
+          <span class="prog-title" id="prog-label">Processing…</span>
+          <span class="prog-frac" id="prog-frac">0 / 0</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+        <div class="prog-rows" id="prog-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RESULTS SECTION ══ -->
+  <div class="results-bar">
+    <div>
+      <div class="sec-title">All Results</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="rcount"><b id="rcount">0</b> companies</span>
+      <button class="btn-clear-all" onclick="clearAll()">Clear All</button>
+    </div>
+  </div>
+
+  <div id="shimmer-area"></div>
+  <div id="cards-area"></div>
+
+</div>
+
+<div id="toasts"></div>
+
+<script>
+// ── ROW MANAGEMENT ──────────────────────────────────────────────────────────
+let rowId = 0;
+
+function addRow(label='', url='') {
+  rowId++;
+  const id = rowId;
+  const tbody = document.getElementById('url-tbody');
+  const tr = document.createElement('tr');
+  tr.className = 'url-row';
+  tr.id = `row-${id}`;
+  tr.innerHTML = `
+    <td style="width:22px">
+      <span class="row-num" id="rn-${id}"></span>
+    </td>
+    <td>
+      <input type="text" placeholder="e.g. SaaS Startup" value="${escHtml(label)}" id="lbl-${id}"/>
+    </td>
+    <td>
+      <input type="text" placeholder="https://company.com" value="${escHtml(url)}" id="url-${id}"/>
+    </td>
+    <td class="td-actions">
+      <button class="btn-del" onclick="removeRow(${id})" title="Remove">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </td>`;
+  tbody.appendChild(tr);
+  renumber();
+  document.getElementById(`url-${id}`).focus();
+}
+
+function removeRow(id) {
+  const el = document.getElementById(`row-${id}`);
+  if (el) { el.style.opacity='0'; el.style.transform='translateX(8px)'; el.style.transition='all .15s'; setTimeout(()=>{el.remove();renumber()},150); }
+}
+
+function renumber() {
+  const rows = document.querySelectorAll('.url-row');
+  rows.forEach((r,i)=>{
+    const nm = r.querySelector('[id^="rn-"]');
+    if(nm) nm.textContent = (i+1);
+  });
+  document.getElementById('row-count').textContent = rows.length + ' row' + (rows.length!==1?'s':'');
+}
+
+function clearRows() {
+  document.getElementById('url-tbody').innerHTML = '';
+  renumber();
+  document.getElementById('prog-area').classList.remove('active');
+}
+
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function getRows() {
+  return [...document.querySelectorAll('.url-row')].map(r=>{
+    const id = r.id.replace('row-','');
+    return { label: document.getElementById(`lbl-${id}`)?.value.trim()||'', url: document.getElementById(`url-${id}`)?.value.trim()||'' };
+  }).filter(r=>r.url.startsWith('http'));
+}
+
+// Start with 1 empty row
+addRow();
+
+// ── TOAST ───────────────────────────────────────────────────────────────────
+function toast(msg, type='inf', dur=3200) {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), dur);
+}
+
+// ── SHIMMER ─────────────────────────────────────────────────────────────────
+function showShimmers(n) {
+  const a = document.getElementById('shimmer-area');
+  const g = document.createElement('div');
+  g.className='grid'; g.id='shim-grid';
+  for(let i=0;i<n;i++){
+    g.innerHTML+=`<div class="shimmer"><div class="sh-line s"></div><div class="sh-line m" style="margin-bottom:16px"></div><div class="sh-line l"></div><div class="sh-line m"></div><div class="sh-line l"></div></div>`;
+  }
+  a.innerHTML=''; a.appendChild(g);
+  document.getElementById('cards-area').innerHTML='';
+}
+function clearShimmers(){ document.getElementById('shimmer-area').innerHTML=''; }
+
+// ── RENDER CARD ──────────────────────────────────────────────────────────────
+function letter(s){ return (!s||s==='N/A')?'?':s.trim()[0].toUpperCase(); }
+function fmtDate(iso){ if(!iso)return''; return new Date(iso).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}); }
+
+function renderCard(r){
+  const mails = Array.isArray(r.mail)?r.mail:(r.mail?[r.mail]:[]);
+  const tags = mails.map(m=>`<span class="tag">${m}</span>`).join('')||'<span style="color:var(--text3);font-size:.72rem">—</span>';
+  return `
+  <div class="ccard">
+    <div class="ccard-top">
+      <div class="avatar">${letter(r.company_name||r.website_name)}</div>
+      <div class="cmeta">
+        <div class="cname" title="${r.company_name||''}">${r.company_name||r.website_name||'Unknown'}</div>
+        <div class="curl">${r.url||''}</div>
+      </div>
+      <button class="cdel" onclick="deleteResult('${r.url}')" title="Delete">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>
+    <div class="ccard-body">
+      <div class="cfield"><div class="cfk">Core Service</div><div class="cfv">${r.core_service||'—'}</div></div>
+      <div class="cfield"><div class="cfk">Target Customer</div><div class="cfv">${r.target_customer||'—'}</div></div>
+      <div class="cfield"><div class="cfk">Pain Point</div><div class="cfv">${r.probable_pain_point||'—'}</div></div>
+      <div class="cfield"><div class="cfk">Address</div><div class="cfv mono">${r.address||'—'}</div></div>
+      <div class="cfield"><div class="cfk">Phone</div><div class="cfv mono">${r.mobile_number||'—'}</div></div>
+      <div class="cfield"><div class="cfk">Emails</div><div class="tags">${tags}</div></div>
+      <div class="cfield"><div class="cfk">Outreach Opener</div><div class="opener-box">${r.outreach_opener||'—'}</div></div>
+    </div>
+    <div class="ccard-foot">
+      <span class="cts">${fmtDate(r.enriched_at)}</span>
+      ${r.label?`<span class="clabel">${r.label}</span>`:''}
+    </div>
+  </div>`;
+}
+
+function renderResults(data){
+  clearShimmers();
+  document.getElementById('rcount').textContent = data.length;
+  const area = document.getElementById('cards-area');
+  if(!data.length){
+    area.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div class="empty-txt">No results yet — enrich some companies above.</div></div>`;
+    return;
+  }
+  const g = document.createElement('div'); g.className='grid';
+  g.innerHTML = data.map(renderCard).join('');
+  area.innerHTML=''; area.appendChild(g);
+}
+
+// ── LOAD ALL ────────────────────────────────────────────────────────────────
+async function loadResults(){
+  showShimmers(3);
+  try{
+    const r = await fetch('/results'); const d = await r.json();
+    renderResults(d);
+  }catch(e){ clearShimmers(); toast('Failed to load results','err'); }
+}
+
+// ── ENRICH ──────────────────────────────────────────────────────────────────
+let pollTimer = null;
+
+async function startEnrich(){
+  const rows = getRows();
+  if(!rows.length){ toast('Add at least one valid URL','err'); return; }
+
+  const btn = document.getElementById('enrich-btn');
+  btn.disabled=true;
+
+  showShimmers(rows.length);
+
+  // Progress UI
+  const pa = document.getElementById('prog-area');
+  pa.classList.add('active');
+  document.getElementById('prog-frac').textContent = `0 / ${rows.length}`;
+  document.getElementById('prog-fill').style.width='0%';
+  document.getElementById('prog-label').textContent='Processing…';
+  const pr = document.getElementById('prog-rows');
+  pr.innerHTML = rows.map((r,i)=>`
+    <div class="prow running" id="prow-${i}">
+      <div class="dot"></div>
+      <span>${r.label?`[${r.label}] `:''}<span style="font-family:var(--mono)">${r.url}</span></span>
+    </div>`).join('');
+
+  // POST
+  let jobId;
+  try{
+    const resp = await fetch('/enrich',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ urls: rows.map(r=>r.url), website_label: rows.map(r=>r.label).join(',') })
+    });
+    const d = await resp.json(); jobId = d.job_id;
+    toast(`Job started · ${rows.length} URL(s)`,'inf');
+  }catch(e){ toast('Failed to start','err'); btn.disabled=false; return; }
+
+  let prevDone=0;
+  pollTimer = setInterval(async()=>{
+    try{
+      const r = await fetch(`/job/${jobId}`); const job = await r.json();
+      const pct = job.total?(job.done/job.total*100):0;
+      document.getElementById('prog-fill').style.width=pct+'%';
+      document.getElementById('prog-frac').textContent=`${job.done} / ${job.total}`;
+      document.getElementById('prog-label').textContent = job.status==='complete'?'✓ Complete':'Processing…';
+
+      const errUrls=(job.errors||[]).map(e=>e.url);
+      const doneUrls=(job.results||[]).map(r=>r.url);
+      rows.forEach((row,i)=>{
+        const el=document.getElementById(`prow-${i}`);
+        if(!el)return;
+        if(errUrls.includes(row.url)) el.className='prow err';
+        else if(doneUrls.includes(row.url)) el.className='prow done';
+      });
+
+      if(job.done>prevDone && job.results.length){
+        prevDone=job.done;
+        clearShimmers();
+        const all = await fetch('/results'); const allD = await all.json();
+        renderResults(allD);
+      }
+
+      if(job.status==='complete'){
+        clearInterval(pollTimer);
+        btn.disabled=false;
+        toast(`Enriched ${job.done} company(ies) ✓`,'ok');
+        const all = await fetch('/results'); const allD = await all.json();
+        renderResults(allD);
+      }
+    }catch(e){}
+  },1800);
+}
+
+// ── DELETE ──────────────────────────────────────────────────────────────────
+async function deleteResult(url){
+  try{
+    const r = await fetch('/results',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})});
+    if(r.ok){ toast('Record deleted','ok'); loadResults(); }
+    else toast('Delete failed','err');
+  }catch(e){ toast('Delete failed','err'); }
+}
+
+async function clearAll(){
+  if(!confirm('Delete ALL enriched records?')) return;
+  await fetch('/results/all',{method:'DELETE'});
+  toast('All cleared','inf'); loadResults();
+}
+
+window.addEventListener('DOMContentLoaded', loadResults);
+</script>
+</body>
+</html>
